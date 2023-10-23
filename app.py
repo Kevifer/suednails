@@ -6,6 +6,9 @@ app = Flask(__name__)
 username = "Sued"
 password = "Sued_2023"
 
+# Sample list of clients
+sample_clients = ["Cliente A", "Cliente B", "Cliente C"]
+
 @app.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -23,7 +26,20 @@ def login():
 
 @app.route('/agenda')
 def agenda():
-    return render_template('agenda.html')
+    return render_template('agenda.html', clients=sample_clients)
+
+@app.route('/clientes')
+def clientes():
+    return render_template('clientes.html', clients=sample_clients)
+
+@app.route('/novo-cliente', methods=['GET', 'POST'])
+def novo_cliente():
+    if request.method == 'POST':
+        new_client_name = request.form.get('client_name')
+        if new_client_name:
+            sample_clients.append(new_client_name)
+
+    return render_template('novo_cliente.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

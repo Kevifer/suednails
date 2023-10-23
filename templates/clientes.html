@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciar Clientes</title>
+</head>
+<body>
+    <h1>Gerenciar Clientes</h1>
+    
+    <!-- Formulário para adicionar cliente -->
+    <form id="add-client-form">
+        <label for="client-name">Nome do Cliente:</label>
+        <input type="text" id="client-name" required>
+        <button type="submit">Adicionar Cliente</button>
+    </form>
+    
+    <!-- Lista de clientes -->
+    <ul id="client-list"></ul>
+    
+    <script>
+        const clientList = document.getElementById('client-list');
+        const addClientForm = document.getElementById('add-client-form');
+        
+        addClientForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const clientName = document.getElementById('client-name').value;
+            
+            // Verifica se o nome do cliente não está em branco
+            if (clientName.trim() === '') {
+                alert('O nome do cliente não pode estar em branco.');
+                return;
+            }
+            
+            // Cria um novo item de cliente na lista
+            const clientItem = document.createElement('li');
+            clientItem.textContent = clientName;
+            clientList.appendChild(clientItem);
+            
+            // Limpa o campo de entrada
+            document.getElementById('client-name').value = '';
+        });
+    </script>
+</body>
+</html>
