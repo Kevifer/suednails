@@ -32,7 +32,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var calendarEl = document.getElementById('calendar');
-
+    
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 headerToolbar: {
@@ -62,20 +62,22 @@
                     if (title) {
                         var startHour = prompt('Hora de início (hh:mm):');
                         var endHour = prompt('Hora de término (hh:mm):');
-                        if (startHour && endHour) {
+                        var clientName = prompt('Nome do Cliente:');
+    
+                        if (startHour && endHour && clientName) {
                             var startDateTime = new Date(info.start);
                             startDateTime.setHours(startHour.split(":")[0]);
                             startDateTime.setMinutes(startHour.split(":")[1]);
-                            
+    
                             var endDateTime = new Date(info.end);
                             endDateTime.setHours(endHour.split(":")[0]);
                             endDateTime.setMinutes(endHour.split(":")[1]);
-                            
+    
                             calendar.addEvent({
-                                title: title,
+                                title: title + ' (' + clientName + ')', // Include client name in the event title
                                 start: startDateTime,
                                 end: endDateTime,
-                                cliente: 'Cliente C'
+                                cliente: clientName
                             });
                         }
                     }
@@ -85,6 +87,8 @@
                 eventRender: function (info) {
                     var startTime = info.event.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                     var endTime = info.event.end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    
+                    // Include client name in the event title
                     info.el.querySelector('.fc-title').textContent = info.event.title + ' - ' + startTime + ' a ' + endTime;
                 },
                 eventDrop: function (info) {
@@ -100,7 +104,7 @@
                     }
                 }
             });
-
+    
             calendar.render();
         });
     </script>
