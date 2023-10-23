@@ -28,8 +28,7 @@
     <h1>Calendário</h1>
     
     <div id="calendar"></div>
-    <a href="/clientes" class="btn btn-primary">Criar Cliente</a>
-
+    
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var calendarEl = document.getElementById('calendar');
@@ -45,14 +44,14 @@
                     // Example events
                     {
                         title: 'Event 1',
-                        start: '2023-10-23T10:00:00',
-                        end: '2023-10-23T12:00:00',
+                        start: '2023-10-23T08:10:00', // Use 08:10 for specific minutes
+                        end: '2023-10-23T10:30:00',
                         cliente: 'Cliente A'
                     },
                     {
                         title: 'Event 2',
-                        start: '2023-10-24T14:00:00',
-                        end: '2023-10-24T16:00:00',
+                        start: '2023-10-24T14:45:00', // Use 14:45 for specific minutes
+                        end: '2023-10-24T16:15:00',
                         cliente: 'Cliente B'
                     }
                 ],
@@ -61,19 +60,32 @@
                 select: function (info) {
                     var title = prompt('Insira o título do evento:');
                     if (title) {
-                        var cliente = prompt('Selecione o cliente:');
-                        calendar.addEvent({
-                            title: title,
-                            start: info.start,
-                            end: info.end,
-                            cliente: cliente
-                        });
+                        var startHour = prompt('Hora de início (hh:mm):');
+                        var endHour = prompt('Hora de término (hh:mm):');
+                        if (startHour && endHour) {
+                            var startDateTime = new Date(info.start);
+                            startDateTime.setHours(startHour.split(":")[0]);
+                            startDateTime.setMinutes(startHour.split(":")[1]);
+                            
+                            var endDateTime = new Date(info.end);
+                            endDateTime.setHours(endHour.split(":")[0]);
+                            endDateTime.setMinutes(endHour.split(":")[1]);
+                            
+                            calendar.addEvent({
+                                title: title,
+                                start: startDateTime,
+                                end: endDateTime,
+                                cliente: 'Cliente C'
+                            });
+                        }
                     }
                     calendar.unselect();
                 },
                 locale: 'pt',
                 eventRender: function (info) {
-                    info.el.querySelector('.fc-title').textContent = info.event.title + ' - ' + info.event.extendedProps.cliente;
+                    var startTime = info.event.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    var endTime = info.event.end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    info.el.querySelector('.fc-title').textContent = info.event.title + ' - ' + startTime + ' a ' + endTime;
                 },
                 eventDrop: function (info) {
                     alert('Evento ' + info.event.title + ' foi movido para ' + info.event.start.toISOString());
